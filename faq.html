@@ -94,7 +94,17 @@
 <h3>I got a red error box with &quot;Authentication failed! Invalid user name, credential or external authentication failed.&quot;</h3>
 <p>This message is a general error message. A more detailed message is printed on screen behind this error message. Please close it and have a look on details.</p>
 <h3>My identity provider is not trusted/does not sign the document</h3>
-<p>B2ACCESS only accepts responses from identity provider with signed assertion elements. Please contact your identity providers helpdesk and ask for singing the assertion elements in SAML response.</p>
+<p>This error occurs if something in response is not signed. In most cases assertion elements within response messages are not signed. The assertion elements must be signed in <a target="_blank" href="http://saml2int.org/profile/current/#section91">SAML2int profile</a>. This profile is the only allowed profile within <a target="_blank" href="https://technical.edugain.org/doc/eduGAIN%20SAML%202.0%20WebSSO%20Profile.pdf">eduGain</a> SSO. B2ACCESS follows this requirements and only accepts responses from identity provider with signed assertion elements. Please contact your identity providers helpdesk and ask for singing the assertion elements in SAML response.<br/>Additional information for IT-staff:<br/>This error occurs often after Shibboleth update. A working configuration is:
+<pre><code>
+&lt;bean parent="RelyingPartyByName" c:relyingPartyIds="https://b2access.eudat.eu:8443/unitygw/saml-sp-metadata"&gt;
+    &lt;property name="profileConfigurations"&gt;
+        &lt;list&gt;
+            &lt;bean parent="SAML2.SSO" p:encryptAssertions="true" p:signResponses="true" p:signAssertions="true" p:encryptionOptional="false" p:nameIDFormatPrecedence="#{{'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'}}"/&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+If this error still occurs although the signatures are fine, please <a target="_blank" href="https://eudat.eu/support-request?service=B2ACCESS">contact us</a>. We will try to find a solution for your problem.</p>
 <h3>The mapping of my remote identity/authentication principal failed</h3>
 <p>In most cases the external identity provider doesn't release all attributes needed by B2ACCESS. B2ACCESS consumes mail and EPPN attributes. Please contact your identity providers helpdesk and ask for releasing this attributes to B2ACCESS. If this error still occurs although these attributes are release, please <a target="_blank" href="https://eudat.eu/support-request?service=B2ACCESS">contact us</a>. We will try to find a solution for your problem.</p>
 <h2>I logged in with my external identity provider and want to associate it with an existing account.</h2>
@@ -105,6 +115,8 @@
 <p>Please contact our <a target="_blank" href="https://eudat.eu/support-request?service=B2ACCESS">helpdesk</a>: you will get an answer very soon!</p>
 <h2>I want to use B2ACCESS as AAI for my new software: what shall I do?</h2>
 <p>Get in <a target="_blank" href="https://eudat.eu/support-request?service=B2ACCESS">contact with us</a>: we will provide a great support!</p>
+Version 1.X</br>
+2016-08-29
 
 </div>
 
